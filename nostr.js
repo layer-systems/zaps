@@ -10,50 +10,68 @@ async function nostrGetZaps() {
         }
     ])
     sub.on('event', data => {
-        // Only show posts without tags (no replies, etc.)
-        // if(data.tags.length != 0) {
-        //     return;
-        // }
-
-        // console.log(data)
-        console.log("Sender: " + data.pubkey)
-        // console.log(data.tags['p'])
+        const sender = data.pubkey;
+        let receiver = ""
         for(let i = 0; i < data.tags.length; i++) {
             if(data.tags[i][0].startsWith('p')) {
-                console.log("Receiver: " + data.tags[i][1])
+                receiver = data.tags[i][1];
             }
         }
 
-        // ---------------------------------------------------------------------
-        // ---------------------------------------------------------------------
-        // ---------------------------------------------------------------------
 
-        // const content = data.content;
+        // Create the outer div with class "card m-2"
+        const cardDiv = document.createElement("div");
+        cardDiv.classList.add("card", "m-2");
 
-        // var divCol = document.createElement('div');
-        // divCol.setAttribute('class', 'col');
-        // var divCard = document.createElement('div');
-        // divCard.setAttribute('class', 'card shadow-sm');
-        // var divCardBody = document.createElement('div');
-        // divCardBody.setAttribute('class', 'card-body');
-        // var pCardText = document.createElement('p');
-        // pCardText.setAttribute('class', 'card-text');
-        // pCardText.innerHTML = content;
-        // var smallText = document.createElement('small');
-        // smallText.setAttribute('class', 'text-body-secondary');
-        // smallText.innerHTML = "formattedTime";
+        // Create the inner div with class "card-body"
+        const cardBodyDiv = document.createElement("div");
+        cardBodyDiv.classList.add("card-body");
 
-        // var smallTextId = document.createElement('small');
-        // smallTextId.setAttribute('class', 'text-body-secondary');
-        // smallTextId.innerHTML = "id";
+        // Create the sender placeholder h5 element with class "card-title"
+        const senderH5 = document.createElement("h5");
+        senderH5.classList.add("card-title");
+        senderH5.textContent = sender;
 
-        // divCardBody.appendChild(pCardText);
+        // Create the lightning bolt icon element
+        const lightningIcon = document.createElement("i");
+        lightningIcon.classList.add("bi", "bi-lightning-fill");
 
-        // divCard.appendChild(divCardBody);
-        // divCol.appendChild(divCard);
-        // document.getElementById('content').appendChild(divCol);
+        // Create the p element with the satoshi amount and lightning icon
+        const satoshiP = document.createElement("p");
+        satoshiP.textContent = "⚡️ 420 sats";
+        satoshiP.prepend(lightningIcon);
+
+        // Create the receiver placeholder h5 element with class "card-title"
+        const receiverH5 = document.createElement("h5");
+        receiverH5.classList.add("card-title");
+        receiverH5.textContent = receiver;
+
+        // Append all the elements together to form the structure
+        cardBodyDiv.appendChild(senderH5);
+        cardBodyDiv.appendChild(satoshiP);
+        cardBodyDiv.appendChild(receiverH5);
+        cardDiv.appendChild(cardBodyDiv);
+
+        // Append the card div to the body of the document
+        document.getElementById('cards').appendChild(cardDiv);
+        
     })
     sub.on('eose', () => {
         sub.unsub()
     })
 }
+
+// async function nostrGetUsername(authors) {
+//     let userNamesub = pool.sub([...relays], [
+//         {
+//             kinds: [1],
+//         }
+//     ])
+//     userNamesub.on('event', data => {
+//         console.log(data);
+//         // return data;
+//     })
+//     userNamesub.on('eose', () => {
+//         sub.unsub()
+//     })
+// }
