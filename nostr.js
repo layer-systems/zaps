@@ -26,7 +26,7 @@ async function nostrGetZaps() {
             }
             if(data.tags[i][0] == ('bolt11')) {
                 bolt11 = data.tags[i][1];
-                console.log(bolt11);
+                // console.log(bolt11);
                 // sats = bolt11.match(/^lnbc(\d+)/)[1];
                 // Remove first 4 characters i.e. 'lnbc'
                 let inputStrWithoutPrefix = bolt11.slice(4);
@@ -35,13 +35,13 @@ async function nostrGetZaps() {
                 // Get the first letter after the number
                 let letterAfterNumber = inputStrWithoutPrefix.charAt(inputStrWithoutPrefix.search(/[a-zA-Z]/));
                 if(letterAfterNumber == 'm') {
-                    sats = (numberAfterPrefix * 0.001) * 100000000;
+                    sats = Math.round((numberAfterPrefix * 0.001) * 100000000);
                 } else if(letterAfterNumber == 'u') {
-                    sats = (numberAfterPrefix * 0.000001) * 100000000;
+                    sats = Math.round((numberAfterPrefix * 0.000001) * 100000000);
                 } else if(letterAfterNumber == 'n') {
-                    sats = (numberAfterPrefix * 0.000000001) * 100000000;
+                    sats = Math.round((numberAfterPrefix * 0.000000001) * 100000000);
                 } else if(letterAfterNumber == 'p') {
-                    sats = (numberAfterPrefix * 0.000000000001) * 100000000;
+                    sats = Math.round((numberAfterPrefix * 0.000000000001) * 100000000);
 
                 }
             }
