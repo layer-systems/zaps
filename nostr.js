@@ -12,11 +12,19 @@ async function nostrGetZaps() {
         }
     ])
     sub.on('event', data => {
+        // console.log(data);
+        sats = 0;
+
         const sender = data.pubkey;
         let receiver = ""
         for(let i = 0; i < data.tags.length; i++) {
             if(data.tags[i][0].startsWith('p')) {
                 receiver = data.tags[i][1];
+            }
+            if(data.tags[i][0] == ('bolt11')) {
+                bolt11 = data.tags[i][1];
+                console.log(bolt11);
+                sats = bolt11.match(/^lnbc(\d+)/)[1];
             }
         }
 
@@ -40,7 +48,7 @@ async function nostrGetZaps() {
 
         // Create the p element with the satoshi amount and lightning icon
         const satoshiP = document.createElement("p");
-        satoshiP.textContent = "⚡️ 420 sats";
+        satoshiP.textContent = "⚡️ " + sats + " sats";
         satoshiP.prepend(lightningIcon);
 
         // Create the receiver placeholder h5 element with class "card-title"
