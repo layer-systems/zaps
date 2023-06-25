@@ -1,6 +1,6 @@
 const pool = new window.NostrTools.SimplePool();
 // let relays = ["wss://relay.nostr.band"];
-let relays = ["wss://relay.damus.io", "wss://relay.nostr.band"];
+let relays = ["wss://relay.damus.io", "wss://relay.nostr.band", "wss://relay.layer.systems"];
 
 nostrGetZaps();
 
@@ -34,7 +34,7 @@ async function nostrGetZaps() {
 
         // Create the outer div with class "card m-2"
         const cardDiv = document.createElement("div");
-        cardDiv.classList.add("card", "m-2");
+        cardDiv.classList.add("card");
 
         // Create the inner div with class "card-body"
         const cardBodyDiv = document.createElement("div");
