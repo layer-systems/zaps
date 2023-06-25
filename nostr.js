@@ -41,6 +41,7 @@ async function nostrGetZaps() {
         const senderH5 = document.createElement("h5");
         senderH5.classList.add("card-title");
         senderH5.textContent = sender;
+        senderH5.id = sender;
 
         // Create the lightning bolt icon element
         const lightningIcon = document.createElement("i");
@@ -55,6 +56,7 @@ async function nostrGetZaps() {
         const receiverH5 = document.createElement("h5");
         receiverH5.classList.add("card-title");
         receiverH5.textContent = receiver;
+        receiverH5.id = receiver;
 
         // Append all the elements together to form the structure
         cardBodyDiv.appendChild(senderH5);
@@ -64,23 +66,40 @@ async function nostrGetZaps() {
 
         // Insert the card div to the body of the document
         document.getElementById('cards').insertBefore(cardDiv, document.getElementById('cards').firstChild);
+
+        // Get the username of the sender and receiver
+        nostrGetUserinfo(sender);
+        nostrGetUserinfo(receiver);
     })
     sub.on('eose', () => {
         // sub.unsub()
     })
 }
 
-// async function nostrGetUsername(authors) {
-//     let userNamesub = pool.sub([...relays], [
-//         {
-//             kinds: [1],
-//         }
-//     ])
-//     userNamesub.on('event', data => {
-//         console.log(data);
-//         // return data;
-//     })
-//     userNamesub.on('eose', () => {
-//         sub.unsub()
-//     })
-// }
+async function nostrGetUserinfo(pubkey) {
+    let sub = pool.sub([...relays], [
+        {
+            kinds: [0],
+            authors: [pubkey],
+            limit: 1
+        }
+    ])
+    sub.on('event', data => {
+        const username = JSON.parse(data.content)['username'];
+        const displayName = JSON.parse(data.content)['displayName'];
+        const name = JSON.parse(data.content)['name'];
+
+        usernameElement = document.getElementById(pubkey);
+
+        if (typeof displayName !== "undefined") {
+            usernameElement.textContent = `${displayName}`;
+        } else if (typeof name !== "undefined") {
+            usernameElement.textContent = `${name}`;
+        } else {
+            usernameElement.textContent = `${username}`;
+        }
+    })
+    sub.on('eose', () => {
+        sub.unsub()
+    })
+}
