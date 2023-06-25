@@ -1,6 +1,6 @@
 const pool = new window.NostrTools.SimplePool();
 // let relays = ["wss://relay.nostr.band"];
-let relays = ["wss://relay.damus.io"];
+let relays = ["wss://relay.damus.io", "wss://relay.nostr.band"];
 
 nostrGetZaps();
 
@@ -8,7 +8,7 @@ async function nostrGetZaps() {
     let sub = pool.sub([...relays], [
         {
             kinds: [9735],
-            limit: 1,
+            limit: 10,
         }
     ])
     sub.on('event', data => {
