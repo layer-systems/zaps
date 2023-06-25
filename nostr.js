@@ -1,5 +1,4 @@
 const pool = new window.NostrTools.SimplePool();
-// let relays = ["wss://relay.nostr.band"];
 let relays = ["wss://relay.damus.io", "wss://relay.nostr.band", "wss://relay.layer.systems"];
 
 nostrGetZaps();
@@ -12,7 +11,6 @@ async function nostrGetZaps() {
         }
     ])
     sub.on('event', data => {
-        // console.log(data);
         sats = 0;
 
         const createdAt = data.created_at;
@@ -26,8 +24,6 @@ async function nostrGetZaps() {
             }
             if(data.tags[i][0] == ('bolt11')) {
                 bolt11 = data.tags[i][1];
-                // console.log(bolt11);
-                // sats = bolt11.match(/^lnbc(\d+)/)[1];
                 // Remove first 4 characters i.e. 'lnbc'
                 let inputStrWithoutPrefix = bolt11.slice(4);
                 // Get the number after 'lnbc'
@@ -48,7 +44,7 @@ async function nostrGetZaps() {
         }
 
 
-        // Create the outer div with class "card m-2"
+        // Create the outer div with class "card"
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("card");
 
