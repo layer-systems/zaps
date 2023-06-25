@@ -43,6 +43,8 @@ async function nostrGetZaps() {
             }
         }
 
+        let sendernpub = NostrTools.nip19.npubEncode(sender);
+        let receivernpub = NostrTools.nip19.npubEncode(receiver);
 
         // Create the outer div with class "card"
         const cardDiv = document.createElement("div");
@@ -55,7 +57,7 @@ async function nostrGetZaps() {
         // Create the sender placeholder h5 element with class "card-title"
         const senderH5 = document.createElement("h5");
         senderH5.classList.add("card-title");
-        senderH5.textContent = sender;
+        senderH5.textContent = sendernpub;
         senderH5.id = sender;
 
         // Create the lightning bolt icon element
@@ -70,7 +72,7 @@ async function nostrGetZaps() {
         // Create the receiver placeholder h5 element with class "card-title"
         const receiverH5 = document.createElement("h5");
         receiverH5.classList.add("card-title");
-        receiverH5.textContent = receiver;
+        receiverH5.textContent = receivernpub;
         receiverH5.id = receiver;
 
         // Create the date placeholder div element with class "card-date"
