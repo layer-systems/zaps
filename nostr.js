@@ -15,15 +15,18 @@ async function nostrGetZaps() {
         // console.log(data);
         sats = 0;
 
+        const createdAt = data.created_at;
         const sender = data.pubkey;
         let receiver = ""
+        let formattedCreatedAt = new Date(createdAt * 1000).toLocaleString();
+
         for(let i = 0; i < data.tags.length; i++) {
             if(data.tags[i][0].startsWith('p')) {
                 receiver = data.tags[i][1];
             }
             if(data.tags[i][0] == ('bolt11')) {
                 bolt11 = data.tags[i][1];
-                console.log(bolt11);
+                // console.log(bolt11);
                 sats = bolt11.match(/^lnbc(\d+)/)[1];
             }
         }
@@ -58,10 +61,16 @@ async function nostrGetZaps() {
         receiverH5.textContent = receiver;
         receiverH5.id = receiver;
 
+        // Create the date placeholder div element with class "card-date"
+        const dateDiv = document.createElement("div");
+        dateDiv.classList.add("card-date");
+        dateDiv.textContent = formattedCreatedAt;
+
         // Append all the elements together to form the structure
         cardBodyDiv.appendChild(senderH5);
         cardBodyDiv.appendChild(satoshiP);
         cardBodyDiv.appendChild(receiverH5);
+        cardBodyDiv.appendChild(dateDiv); // add date element
         cardDiv.appendChild(cardBodyDiv);
 
         // Insert the card div to the body of the document
