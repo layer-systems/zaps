@@ -62,9 +62,8 @@ async function nostrGetZaps() {
         cardBodyDiv.appendChild(receiverH5);
         cardDiv.appendChild(cardBodyDiv);
 
-        // Append the card div to the body of the document
-        document.getElementById('cards').appendChild(cardDiv);
-        
+        // Insert the card div to the body of the document
+        document.getElementById('cards').insertBefore(cardDiv, document.getElementById('cards').firstChild);
     })
     sub.on('eose', () => {
         // sub.unsub()
