@@ -1,6 +1,6 @@
 const pool = new window.NostrTools.SimplePool();
 // let relays = ["wss://relay.nostr.band"];
-let relays = ["wss://relay.damus.io", "wss://relay.nostr.band"];
+let relays = ["wss://relay.damus.io", "wss://relay.nostr.band", "wss://relay.layer.systems"];
 
 nostrGetZaps();
 
