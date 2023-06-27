@@ -19,10 +19,10 @@ async function nostrGetZaps() {
         let formattedCreatedAt = new Date(createdAt * 1000).toLocaleString();
 
         for(let i = 0; i < data.tags.length; i++) {
-            if(data.tags[i][0].startsWith('p')) {
+            if(data.tags[i][0] == ('p')) {
                 receiver = data.tags[i][1];
             }
-            if(data.tags[i][0].startsWith('description')) {
+            if(data.tags[i][0] == ('description')) {
                 description = JSON.parse(data.tags[i][1]);
 
                 sender = description.pubkey;
@@ -53,7 +53,6 @@ async function nostrGetZaps() {
 
         // Create a random div number
         const divNumber = Math.floor(Math.random() * 999999);
-        console.log(divNumber);
         // Create the outer div with class "card"
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("card");
