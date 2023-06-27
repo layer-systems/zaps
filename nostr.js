@@ -14,13 +14,18 @@ async function nostrGetZaps() {
         sats = 0;
 
         const createdAt = data.created_at;
-        const sender = data.pubkey;
-        let receiver = ""
+        let sender = "not found"
+        let receiver = "not found"
         let formattedCreatedAt = new Date(createdAt * 1000).toLocaleString();
 
         for(let i = 0; i < data.tags.length; i++) {
             if(data.tags[i][0].startsWith('p')) {
                 receiver = data.tags[i][1];
+            }
+            if(data.tags[i][0].startsWith('description')) {
+                description = JSON.parse(data.tags[i][1]);
+
+                sender = description.pubkey;
             }
             if(data.tags[i][0] == ('bolt11')) {
                 bolt11 = data.tags[i][1];
@@ -72,7 +77,7 @@ async function nostrGetZaps() {
         // Create the receiver placeholder h5 element with class "card-title"
         const receiverH5 = document.createElement("h5");
         receiverH5.classList.add("card-title");
-        receiverH5.textContent = receivernpub;
+        receiverH5.textContent = receiver;
         receiverH5.id = receiver;
 
         // Create the date placeholder div element with class "card-date"
