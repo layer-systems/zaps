@@ -1,0 +1,42 @@
+name: BETA Deployment
+run-name: Deployment of Branch ${{ github.ref_name }} to BETA Environment
+on:
+  workflow_call:
+    inputs:
+      deployment:
+        description: 'Name if the deployment to restart'
+        required: true
+        type: string
+        default: 'zaps-beta'
+      namespace:
+        description: 'Name of the namespace to restart the deployment in'
+        required: true
+        type: string
+        default: 'layer-systems'
+
+jobs:
+  deployment:
+    name: Deployment of Branch ${{ github.ref_name }} to BETA Environment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup kubectl
+        id: install-kubectl
+        uses: azure/setup-kubectl@v3
+
+      - uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+        id: install-helm
+
+      - uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Upgrade/Install Helm Chart
+        run: helm upgrade --install ${{ inputs.deployment }} helm/nostrzaps -n ${{ inputs.namespace }}
+
+      # - name: Restart Deployment
+      #   run: kubectl rollout restart deployment ${{ inputs.deployment }} -n ${{ inputs.namespace }}
