@@ -14,13 +14,18 @@ async function nostrGetZaps() {
         sats = 0;
 
         const createdAt = data.created_at;
-        const sender = data.pubkey;
-        let receiver = ""
+        let sender = "not found"
+        let receiver = "not found"
         let formattedCreatedAt = new Date(createdAt * 1000).toLocaleString();
 
         for(let i = 0; i < data.tags.length; i++) {
-            if(data.tags[i][0].startsWith('p')) {
+            if(data.tags[i][0] == ('p')) {
                 receiver = data.tags[i][1];
+            }
+            if(data.tags[i][0] == ('description')) {
+                description = JSON.parse(data.tags[i][1]);
+
+                sender = description.pubkey;
             }
             if(data.tags[i][0] == ('bolt11')) {
                 bolt11 = data.tags[i][1];
@@ -46,6 +51,8 @@ async function nostrGetZaps() {
         let sendernpub = NostrTools.nip19.npubEncode(sender);
         let receivernpub = NostrTools.nip19.npubEncode(receiver);
 
+        // Create a random div number
+        const divNumber = Math.floor(Math.random() * 999999);
         // Create the outer div with class "card"
         const cardDiv = document.createElement("div");
         cardDiv.classList.add("card");
@@ -58,7 +65,7 @@ async function nostrGetZaps() {
         const senderH5 = document.createElement("h5");
         senderH5.classList.add("card-title");
         senderH5.textContent = sendernpub;
-        senderH5.id = sender;
+        senderH5.id = sender+""+divNumber;
 
         // Create the lightning bolt icon element
         const lightningIcon = document.createElement("i");
@@ -73,7 +80,7 @@ async function nostrGetZaps() {
         const receiverH5 = document.createElement("h5");
         receiverH5.classList.add("card-title");
         receiverH5.textContent = receivernpub;
-        receiverH5.id = receiver;
+        receiverH5.id = receiver+""+divNumber;
 
         // Create the date placeholder div element with class "card-date"
         const dateDiv = document.createElement("div");
@@ -91,15 +98,15 @@ async function nostrGetZaps() {
         document.getElementById('cards').insertBefore(cardDiv, document.getElementById('cards').firstChild);
 
         // Get the username of the sender and receiver
-        nostrGetUserinfo(sender);
-        nostrGetUserinfo(receiver);
+        nostrGetUserinfo(sender, divNumber);
+        nostrGetUserinfo(receiver, divNumber);
     })
     sub.on('eose', () => {
         // sub.unsub()
     })
 }
 
-async function nostrGetUserinfo(pubkey) {
+async function nostrGetUserinfo(pubkey, divNumber) {
     let sub = pool.sub([...relays], [
         {
             kinds: [0],
@@ -112,7 +119,7 @@ async function nostrGetUserinfo(pubkey) {
         const displayName = JSON.parse(data.content)['displayName'];
         const name = JSON.parse(data.content)['name'];
 
-        usernameElement = document.getElementById(pubkey);
+        usernameElement = document.getElementById(pubkey+divNumber);
 
         if (typeof displayName !== "undefined") {
             usernameElement.textContent = `${displayName}`;
