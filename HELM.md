@@ -1,12 +1,13 @@
 # Helm Installation
 
 ## Installation
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
-```bash
-helm install my-nginx bitnami/nginx --version 15.0.2 --values custom-values.yaml
-```
+1. Copy helm/values.yaml to custom-values.yaml in this root dir with
+    ```bash
+    cp helm/values.yaml ../custom-values.yaml
+    ```
+2. Now edit the custom-values.yaml file.
 
-## Source
-https://artifacthub.io/packages/helm/bitnami/nginx
+3. Then install it with:
+    ```bash
+    helm install zaps helm/nostrzaps --values custom-values.yaml
+    ```
