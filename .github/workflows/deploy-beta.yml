@@ -1,7 +1,7 @@
 name: BETA Deployment
 run-name: Deployment of Branch ${{ github.ref_name }} to BETA Environment
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       deployment:
         description: 'Name if the deployment to restart'
