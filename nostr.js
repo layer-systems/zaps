@@ -121,12 +121,14 @@ async function nostrGetUserinfo(pubkey, divNumber) {
 
         usernameElement = document.getElementById(pubkey+divNumber);
 
-        if (typeof displayName !== "undefined") {
+        if (typeof displayName !== "undefined" && displayName !== "") {
             usernameElement.textContent = `${displayName}`;
-        } else if (typeof name !== "undefined") {
+        } else if (typeof name !== "undefined" && name !== "") {
             usernameElement.textContent = `${name}`;
         } else {
-            usernameElement.textContent = `${username}`;
+            if(username !== "undefined" && username !== "") {
+                usernameElement.textContent = `${username}`;
+            }
         }
     })
     sub.on('eose', () => {
